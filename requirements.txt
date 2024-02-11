@@ -13,12 +13,15 @@ cffi==1.16.0
 charset-normalizer==3.3.2
 colorama==0.4.6
 comm==0.2.1
+contourpy==1.2.0
+cycler==0.12.1
 debugpy==1.8.1
 decorator==5.1.1
 defusedxml==0.7.1
 exceptiongroup==1.2.0
 executing==2.0.1
 fastjsonschema==2.19.1
+fonttools==4.48.1
 fqdn==1.5.1
 idna==3.6
 ipykernel==6.29.2
@@ -42,7 +45,9 @@ jupyter_server_terminals==0.5.2
 jupyterlab==4.0.12
 jupyterlab_pygments==0.3.0
 jupyterlab_server==2.25.2
+kiwisolver==1.4.5
 MarkupSafe==2.1.5
+matplotlib==3.8.2
 matplotlib-inline==0.1.6
 mistune==3.0.2
 ml-dtypes==0.3.2
@@ -58,6 +63,7 @@ overrides==7.7.0
 packaging==23.2
 pandocfilters==1.5.1
 parso==0.8.3
+pillow==10.2.0
 platformdirs==4.2.0
 prometheus-client==0.19.0
 prompt-toolkit==3.0.43
@@ -65,6 +71,7 @@ psutil==5.9.8
 pure-eval==0.2.2
 pycparser==2.21
 Pygments==2.17.2
+pyparsing==3.1.1
 python-dateutil==2.8.2
 python-json-logger==2.0.7
 pywin32==306
@@ -76,6 +83,7 @@ requests==2.31.0
 rfc3339-validator==0.1.4
 rfc3986-validator==0.1.1
 rpds-py==0.17.1
+SciencePlots==2.1.1
 scipy==1.11.4
 Send2Trash==1.8.2
 six==1.16.0
