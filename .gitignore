@@ -1,5 +1,12 @@
 **/venv
 
 **/.idea
+.vscode
 
 black-scholes-hedging/results/
+
+**/__pycache__/
+
+**/.pytest_cache/
+
+nb_experimental
