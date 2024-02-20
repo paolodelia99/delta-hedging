@@ -4,7 +4,19 @@
 
 ## Current notebooks
 
-- [Black-Scholes delta hedging](black-scholes-hedging/bs_delta_hedging.ipynb)
-- [Black-Scholes delta hedging simulations](black-scholes-hedging/bs_delta_hedging_simulations.ipynb)
-- [Black-Scholes delta hedging convergence](black-scholes-hedging/bs_delta_hedging_convergence.ipynb)
-- [Black-Scholes gamma hedging](black-scholes-hedging/bs_gamma_hedging.ipynb)
+- Black Scholes hedging
+  - [Black-Scholes delta hedging](black-scholes-hedging/call-option/bs_delta_hedging.ipynb)
+  - [Black-Scholes delta hedging simulations](black-scholes-hedging/call-option/bs_delta_hedging_simulations.ipynb)
+  - [Black-Scholes delta hedging convergence](black-scholes-hedging/call-option/bs_delta_hedging_convergence.ipynb)
+  - [Black-Scholes gamma hedging](black-scholes-hedging/call-option/bs_gamma_hedging.ipynb)
+  - [Black-Scholes gamma hedging (initially)]
+  - [Black-Scholes gamma hedging (initially and rehedge every once in a while)]
+
+## TODOs
+
+- [ ] Add text to notebooks
+- [ ] First draft of Deep Hedging
+- [ ] Bidimensional BS 
+  - [ ] Spread option
+- [ ] Include transaction costs
+- [ ] Heston model
