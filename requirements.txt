@@ -28,7 +28,7 @@ ipykernel==6.29.2
 ipython==8.21.0
 isoduration==20.11.0
 jax==0.4.23
-JaxFin==0.0.2
+JaxFin==0.1.0
 jaxlib==0.4.23
 jedi==0.19.1
 Jinja2==3.1.3
