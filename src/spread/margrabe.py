@@ -49,24 +49,23 @@ def margrabe(
 
     return spots_2 * cum_normal(d1) - spots_1 * cum_normal(d2)
 
-def margrabe_deltas(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_first=False, dtype: jnp.dtype = None):
+def margrabe_deltas(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
     """
+    Calculate the deltas (with respect to S1 and S2 respectively) of a spread option max(S_2 - S_1, 0) using the Margrabe formula.
 
-    :param spots_1:
-    :param spots_2:
-    :param expires:
-    :param vols:
-    :param corr:
-    :param exchange_first:
-    :param dtype:
-    :return:
+    :param spots_1: The spot price of the first asset
+    :param spots_2: The spot price of the second asset
+    :param expires: The time to expiration of the option
+    :param vols: The volatility of the two assets
+    :param corr: The correlation between the two assets
+    :return: The deltas of the spread option
     """
-    delta_1 = grad(margrabe, argnums=0)(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_first, dtype)
-    delta_2 = grad(margrabe, argnums=1)(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_first, dtype)
+    delta_1 = grad(margrabe, argnums=0)(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
+    delta_2 = grad(margrabe, argnums=1)(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
 
     return delta_1, delta_2
 
-def margrabe_gammas(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_first=False, dtype: jnp.dtype = None):
+def margrabe_gammas(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
     """
 
     :param spots_1:
@@ -78,12 +77,12 @@ def margrabe_gammas(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_
     :param dtype:
     :return:
     """
-    gamma_1 = grad(grad(margrabe, argnums=0))(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_first, dtype)
-    gamma_2 = grad(grad(margrabe, argnums=1))(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_first, dtype)
+    gamma_1 = grad(grad(margrabe, argnums=0))(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
+    gamma_2 = grad(grad(margrabe, argnums=1))(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
 
     return gamma_1, gamma_2
 
-def margrabe_cross_gamma(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_first=False, dtype: jnp.dtype = None):
+def margrabe_cross_gamma(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
     """
 
     :param spots_1:
@@ -95,8 +94,8 @@ def margrabe_cross_gamma(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exch
     :param dtype:
     :return:
     """
-    cross_gamma_1 = grad(grad(margrabe, argnums=0), argnums=1)(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_first, dtype)
-    cross_gamma_2 = grad(grad(margrabe, argnums=1), argnums=0)(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_first, dtype)
+    cross_gamma_1 = grad(grad(margrabe, argnums=0), argnums=1)(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
+    cross_gamma_2 = grad(grad(margrabe, argnums=1), argnums=0)(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
 
     return cross_gamma_1, cross_gamma_2
 
@@ -109,7 +108,8 @@ def v_margrabe(
         corr: jax.Array
 ):
     """
-
+    Vectorized version of the Margrabe formula.
+    
     :param spots_1:
     :param spots_2:
     :param expires:
@@ -129,14 +129,9 @@ def v_margrabe(
         corr = jnp.expand_dims(corr, axis=0)
 
     return map(lambda spots: margrabe(spots[0], spots[1], expires, sigma_1, sigma_2, corr), (spots_1, spots_2))
-    #return vmap(margrabe, in_axes=(0, 0, 0, 0, 0, 0, None, None), out_axes=0)(
-    #    spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_first, dtype
-    #)
 
 
 if __name__ == '__main__':
-    vmap_margrabe = vmap(margrabe, in_axes=(0, 0, 0, 0, 0, 0, None, None))
-
     dtype = jnp.float32
     spots_1 = jnp.asarray(100, dtype=dtype)
     spots_2 = jnp.asarray(120, dtype=dtype)
@@ -188,6 +183,6 @@ if __name__ == '__main__':
     sigma_2 = jnp.asarray([0.3, 0.3], dtype=dtype)
     corr = jnp.asarray([0.7, 0.7], dtype=dtype)
 
-    spread_opt_price = vmap_margrabe(spots_1, spots_2, expires, sigma_1, sigma_2, corr, False, dtype)
+    spread_opt_price = v_margrabe(spots_1, spots_2, expires, sigma_1, sigma_2, corr, False, dtype)
 
     print(f'Margrabre price: {spread_opt_price}')
