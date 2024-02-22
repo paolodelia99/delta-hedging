@@ -1,6 +1,9 @@
 import jax
 import jax.numpy as jnp
 from jax import grad, jit, vmap
+from jax.lax import map
+from jax.tree_util import Partial
+
 from jaxfin.price_engine.math import cum_normal
 from jaxfin.price_engine.utils import cast_arrays
 
@@ -20,43 +23,31 @@ def compute_d1_d2(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
 
     return d1, d2
 
-
+@jit
 def margrabe(
         spots_1: jax.Array,
         spots_2: jax.Array,
         expires: jax.Array,
         sigma_1: jax.Array,
         sigma_2: jax.Array,
-        corr: jax.Array,
-        exchange_first: bool = False,
-        dtype: jnp.dtype = None
+        corr: jax.Array
 ):
     """
-
-    :param spots_1:
-    :param spots_2:
-    :param expires:
-    :param sigma_1:
-    :param sigma_2:
-    :param corr:
-    :param exchange_first:
-    :param dtype:
-    :return:
+    Calculate the price of a spread option max(S_2 - S_1, 0) using the Margrabe formula.
+    Both S_2 and S_1 are assumed to be log-normally distributed with correlation corr.
+    
+    :param spots_1: The spot price of the first asset
+    :param spots_2: The spot price of the second asset
+    :param expires: The time to expiration of the option
+    :param sigma_1: The volatility of the first asset
+    :param sigma_2: The volatility of the second asset
+    :param corr: The correlation between the two assets
+    :param dtype: The dtype of the input
+    :return: The price of the spread option
     """
-    [spots_1, spots_2, expires, sigma_1, sigma_2, corr] = cast_arrays(
-        [spots_1, spots_2, expires, sigma_1, sigma_2, corr], dtype
-    )
+    d1, d2 = compute_d1_d2(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
 
-    if exchange_first:
-        _spots_1 = spots_2
-        _spots_2 = spots_1
-    else:
-        _spots_1 = spots_1
-        _spots_2 = spots_2
-
-    d1, d2 = compute_d1_d2(_spots_1, _spots_2, expires, sigma_1, sigma_2, corr)
-
-    return _spots_2 * cum_normal(d1) - _spots_1 * cum_normal(d2)
+    return spots_2 * cum_normal(d1) - spots_1 * cum_normal(d2)
 
 def margrabe_deltas(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_first=False, dtype: jnp.dtype = None):
     """
@@ -109,6 +100,39 @@ def margrabe_cross_gamma(spots_1, spots_2, expires, sigma_1, sigma_2, corr, exch
 
     return cross_gamma_1, cross_gamma_2
 
+def v_margrabe(
+        spots_1: jax.Array,
+        spots_2: jax.Array,
+        expires: jax.Array,
+        sigma_1: jax.Array,
+        sigma_2: jax.Array,
+        corr: jax.Array
+):
+    """
+
+    :param spots_1:
+    :param spots_2:
+    :param expires:
+    :param sigma_1:
+    :param sigma_2:
+    :param corr:
+    :param exchange_first:
+    :param dtype:
+    :return:
+    """
+    if spots_1.shape == ():
+        spots_1 = jnp.expand_dims(spots_1, axis=0)
+        spots_2 = jnp.expand_dims(spots_2, axis=0)
+        expires = jnp.expand_dims(expires, axis=0)
+        sigma_1 = jnp.expand_dims(sigma_1, axis=0)
+        sigma_2 = jnp.expand_dims(sigma_2, axis=0)
+        corr = jnp.expand_dims(corr, axis=0)
+
+    return map(lambda spots: margrabe(spots[0], spots[1], expires, sigma_1, sigma_2, corr), (spots_1, spots_2))
+    #return vmap(margrabe, in_axes=(0, 0, 0, 0, 0, 0, None, None), out_axes=0)(
+    #    spots_1, spots_2, expires, sigma_1, sigma_2, corr, exchange_first, dtype
+    #)
+
 
 if __name__ == '__main__':
     vmap_margrabe = vmap(margrabe, in_axes=(0, 0, 0, 0, 0, 0, None, None))
@@ -134,7 +158,7 @@ if __name__ == '__main__':
     print(f'Sigma 2: {sigma_2}')
     print(f'Corr: {corr}')
 
-    print(f'Margrabre price: {spread_opt_price}')
+    print(f'Margrabre price: {spread_opt_price}', end='\n\n')
     print('Greeks:')
     print(f'Delta 1: {delta_1}')
     print(f'Delta 2: {delta_2}')
