@@ -1,8 +1,7 @@
-import jax
 import jax.numpy as jnp
-from jax import grad, jit, vmap
-from jaxfin.price_engine.black_scholes import delta_vanilla, bs_price
-from black_scholes import black_scholes_call_price, bs_price
+from jax import grad
+from jaxfin.price_engine.black_scholes import bs_price
+from .black_scholes import black_scholes_call_price, bs_price
 
 
 def bs_delta(spot, strike, rate, vol, maturity):
