@@ -75,8 +75,8 @@ def margrabe_gammas(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
     :param dtype:
     :return:
     """
-    gamma_1 = grad(grad(margrabe, argnums=0))(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
-    gamma_2 = grad(grad(margrabe, argnums=1))(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
+    gamma_1 = grad(grad(margrabe, argnums=0), argnums=0)(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
+    gamma_2 = grad(grad(margrabe, argnums=1), argnums=1)(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
 
     return gamma_1, gamma_2
 
