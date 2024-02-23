@@ -1,11 +1,9 @@
 import jax
 import jax.numpy as jnp
-from jax import grad, jit, vmap
+from jax import grad, jit
 from jax.lax import map
-from jax.tree_util import Partial
 
 from jaxfin.price_engine.math import cum_normal
-from jaxfin.price_engine.utils import cast_arrays
 
 
 @jit
