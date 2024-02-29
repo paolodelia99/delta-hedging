@@ -47,6 +47,7 @@ def margrabe(
 
     return spots_2 * cum_normal(d1) - spots_1 * cum_normal(d2)
 
+@jit
 def margrabe_deltas(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
     """
     Calculate the deltas (with respect to S1 and S2 respectively) of a spread option max(S_2 - S_1, 0) using the Margrabe formula.
@@ -63,6 +64,7 @@ def margrabe_deltas(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
 
     return delta_1, delta_2
 
+@jit
 def margrabe_gammas(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
     """
 
@@ -80,6 +82,7 @@ def margrabe_gammas(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
 
     return gamma_1, gamma_2
 
+@jit
 def margrabe_cross_gamma(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
     """
 
