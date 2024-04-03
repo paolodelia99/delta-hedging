@@ -8,5 +8,6 @@ black-scholes-hedging/results/
 **/__pycache__/
 
 **/.pytest_cache/
+**/.ipynb_checkpoints/
 
 nb_experimental
