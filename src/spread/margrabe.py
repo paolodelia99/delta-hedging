@@ -3,7 +3,7 @@ import jax.numpy as jnp
 from jax import grad, jit
 from jax.lax import map
 
-from jaxfin.price_engine.math import cum_normal
+from jaxfin.price_engine.math.norm import cum_normal
 
 
 @jit
@@ -62,7 +62,7 @@ def margrabe_deltas(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
     delta_1 = grad(margrabe, argnums=0)(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
     delta_2 = grad(margrabe, argnums=1)(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
 
-    return delta_1, delta_2
+    return jnp.asarray([delta_1, delta_2])
 
 @jit
 def margrabe_gammas(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
@@ -80,7 +80,7 @@ def margrabe_gammas(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
     gamma_1 = grad(grad(margrabe, argnums=0), argnums=0)(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
     gamma_2 = grad(grad(margrabe, argnums=1), argnums=1)(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
 
-    return gamma_1, gamma_2
+    return jnp.asarray([gamma_1, gamma_2])
 
 @jit
 def margrabe_cross_gamma(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
@@ -98,7 +98,7 @@ def margrabe_cross_gamma(spots_1, spots_2, expires, sigma_1, sigma_2, corr):
     cross_gamma_1 = grad(grad(margrabe, argnums=0), argnums=1)(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
     cross_gamma_2 = grad(grad(margrabe, argnums=1), argnums=0)(spots_1, spots_2, expires, sigma_1, sigma_2, corr)
 
-    return cross_gamma_1, cross_gamma_2
+    return jnp.asarray([cross_gamma_1, cross_gamma_2])
 
 def v_margrabe(
         spots_1: jax.Array,
