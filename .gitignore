@@ -11,3 +11,5 @@ black-scholes-hedging/results/
 **/.ipynb_checkpoints/
 
 nb_experimental
+
+**/results/*
