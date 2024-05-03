@@ -10,7 +10,7 @@ SEED = 0
 
 black_scholes_call_price_v = vmap(black_scholes_call_price)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     key = random.PRNGKey(SEED)
 
     dtype = jnp.float32
@@ -39,12 +39,15 @@ if __name__ == '__main__':
 
     end = time.time()
 
-    print(f'Matrix args time: {end - start}')
+    print(f"Matrix args time: {end - start}")
 
     start = time.time()
 
-    res_1 = [black_scholes_call_price(stock_paths[i], K, rate, sigma, maturity - i * dt) for i in range(0, N)]
+    res_1 = [
+        black_scholes_call_price(stock_paths[i], K, rate, sigma, maturity - i * dt)
+        for i in range(0, N)
+    ]
 
     end = time.time()
 
-    print(f'list comprehension: {end - start}')
+    print(f"list comprehension: {end - start}")

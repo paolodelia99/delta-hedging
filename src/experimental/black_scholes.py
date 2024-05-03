@@ -6,6 +6,7 @@ from typing import List
 
 _SQRT_2 = jnp.sqrt(2.0)
 
+
 @jax.jit
 def black_scholes_call_price(spot, strike, rate, volatility, time_to_maturity):
     """
@@ -21,13 +22,16 @@ def black_scholes_call_price(spot, strike, rate, volatility, time_to_maturity):
     Returns:
         Price of the call option.
     """
-    d1 = (jnp.log(spot / strike) + (rate + 0.5 * volatility ** 2) * time_to_maturity) / (
-            volatility * jnp.sqrt(time_to_maturity))
+    d1 = (
+        jnp.log(spot / strike) + (rate + 0.5 * volatility**2) * time_to_maturity
+    ) / (volatility * jnp.sqrt(time_to_maturity))
     d2 = d1 - volatility * jnp.sqrt(time_to_maturity)
 
     call_price = spot * jax.scipy.stats.norm.cdf(d1) - strike * jnp.exp(
-        -rate * time_to_maturity) * jax.scipy.stats.norm.cdf(d2)
+        -rate * time_to_maturity
+    ) * jax.scipy.stats.norm.cdf(d2)
     return call_price
+
 
 @jax.jit
 def black_scholes_put_price(spot, strike, rate, volatility, time_to_maturity):
@@ -44,12 +48,16 @@ def black_scholes_put_price(spot, strike, rate, volatility, time_to_maturity):
     Returns:
         Price of the put option.
     """
-    d1 = (jnp.log(spot / strike) + (rate + 0.5 * volatility ** 2) * time_to_maturity) / (
-            volatility * jnp.sqrt(time_to_maturity))
+    d1 = (
+        jnp.log(spot / strike) + (rate + 0.5 * volatility**2) * time_to_maturity
+    ) / (volatility * jnp.sqrt(time_to_maturity))
     d2 = d1 - volatility * jnp.sqrt(time_to_maturity)
 
-    put_price = strike * jnp.exp(-rate * time_to_maturity) * jax.scipy.stats.norm.cdf(-d2) - spot * jax.scipy.stats.norm.cdf(-d1)
+    put_price = strike * jnp.exp(-rate * time_to_maturity) * jax.scipy.stats.norm.cdf(
+        -d2
+    ) - spot * jax.scipy.stats.norm.cdf(-d1)
     return put_price
+
 
 def bs_price(
     spots: jax.Array,
@@ -89,6 +97,7 @@ def bs_price(
     puts = calls + (strikes * discount_factors) - spots
     return jnp.where(are_calls, calls, puts)
 
+
 def cast_arrays(array: List[jax.Array], dtype):
     """
     Casts the array to the specified dtype
@@ -101,6 +110,7 @@ def cast_arrays(array: List[jax.Array], dtype):
         return [jnp.astype(el, dtype) for el in array]
 
     return array
+
 
 @jax.jit
 def compute_undiscounted_call_prices(spots, strikes, expires, vols, discount_rates):
@@ -116,7 +126,10 @@ def compute_undiscounted_call_prices(spots, strikes, expires, vols, discount_rat
     """
     [_d1, _d2] = _compute_d1_d2(spots, strikes, expires, vols, discount_rates)
 
-    return cum_normal(_d1) * spots - cum_normal(_d2) * strikes * jnp.exp(-discount_rates * expires)
+    return cum_normal(_d1) * spots - cum_normal(_d2) * strikes * jnp.exp(
+        -discount_rates * expires
+    )
+
 
 def _compute_d1_d2(spots, strikes, expires, vols, discount_rates):
     """
@@ -134,6 +147,7 @@ def _compute_d1_d2(spots, strikes, expires, vols, discount_rates):
     _d1 = d1(spots, strikes, vols, expires, discount_rates)
 
     return [_d1, _d1 - vol_sqrt_t]
+
 
 @jax.jit
 def d1(spots, strikes, vols, expires, discount_rates):
