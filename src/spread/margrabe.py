@@ -157,27 +157,27 @@ def v_margrabe(
 
 if __name__ == "__main__":
     dtype = jnp.float32
-    spots_1 = jnp.asarray(100, dtype=dtype)
-    spots_2 = jnp.asarray(120, dtype=dtype)
-    expires = jnp.asarray(1.0, dtype=dtype)
-    sigma_1 = jnp.asarray(0.2, dtype=dtype)
-    sigma_2 = jnp.asarray(0.3, dtype=dtype)
-    corr = jnp.asarray(0.7, dtype=dtype)
+    spots_1: float = 100.0
+    spots_2: float = 100.0
+    expires: float = 1.0
+    sigma_1: float = 0.2
+    sigma_2: float = 0.2
+    corr: float = 0.0
 
     spread_opt_price = margrabe(
-        spots_1, spots_2, expires, sigma_1, sigma_2, corr, dtype=dtype
+        spots_1, spots_2, expires, sigma_1, sigma_2, corr
     )
     delta_1, delta_2 = margrabe_deltas(
-        spots_1, spots_2, expires, sigma_1, sigma_2, corr, dtype=dtype
+        spots_1, spots_2, expires, sigma_1, sigma_2, corr
     )
     gamma_1, gamma_2 = margrabe_gammas(
-        spots_1, spots_2, expires, sigma_1, sigma_2, corr, dtype=dtype
+        spots_1, spots_2, expires, sigma_1, sigma_2, corr
     )
     cross_gamma_1, cross_gamma_2 = margrabe_cross_gamma(
-        spots_1, spots_2, expires, sigma_1, sigma_2, corr, dtype=dtype
+        spots_1, spots_2, expires, sigma_1, sigma_2, corr
     )
 
-    print("Paraneters")
+    print("Parameters")
     print(f"Spot 1: {spots_1}")
     print(f"Spot 2: {spots_2}")
     print(f"Expires: {expires}")
