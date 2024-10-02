@@ -54,24 +54,24 @@ The following parameters were used for the experiments:
 The performance of the hedging strategies was evaluated using the following metrics:
 
 - **Replication Error**: 
-$$
+```math
 \epsilon = \Pi_T - (S_T - K)^+ 
-$$
+```
 
 - **Key Metrics**:
   - Mean Error in Negative (MEN):
-  $$
+  ```math
   MEN = \frac{MHE}{\Pi_0}
-  $$
+  ```
   - Standard Error Normalized (SEN):
-  $$
+  ```math
   SEN = \frac{\sqrt{\frac{1}{n} \sum_{i = 1}^n \left(( \Pi_{T, i} - (X_{T, i} - K_i)^{+} ) - MHE\right)^2}}{\Pi_0}
-  $$
+  ```
 
   Where:
-  $$
+  ```math
   MHE = \frac{1}{n} \sum_{i = 1}^n ( \Pi_{T, i} - (X_{T, i} - K)^{+} )
-  $$
+  ```
 
 
 ## Current notebooks
