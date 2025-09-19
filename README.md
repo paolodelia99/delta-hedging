@@ -1,5 +1,9 @@
 # Delta Hedging: A Comparative Study Using Machine Learning and Traditional Methods
 
+This repository contains the experiments that I've runned for my Master's Thesis. Over the time I've also added some other notebook still related to $\Delta$ Hedging but with other assets or methodologies. I hope you learn from something from it.
+
+## Thesis abstract:
+
 > This project explores delta hedging strategies in quantitative finance, comparing traditional analytical methods with emerging Reinforcement Learning (RL) approaches for risk management in options trading. By implementing and evaluating these strategies across simulated market environments, including the Black-Scholes and Heston models, the study highlights the strengths and limitations of each approach, taking into account factors such as transaction costs and stochastic volatility. The findings suggest that while analytical methods offer a solid foundation, RL-based strategies show promising adaptability, providing valuable insights for optimizing risk management in complex financial markets.
 
 ![rl-env](images/rl_hedging_1.png)
@@ -81,6 +85,9 @@ The performance of the hedging strategies was evaluated using the following metr
   - [Black-Scholes delta hedging with ](black-scholes-hedging/call-option/bs_delta_hedging.ipynb)$\Delta^{W}$ (Wilmott delta)
   - [Heston delta hedging with ](black-scholes-hedging/call-option/bs_delta_hedging.ipynb)$\Delta^{H}$
   - [Heston delta hedging with ](black-scholes-hedging/call-option/bs_delta_hedging.ipynb)$\Delta^{W}$ (Wilmott delta)
+  - FX
+    - [FX Delta Hedging example](./black-scholes-hedging/fx/fx-delta-hedging-example.ipynb)
+    - [FX Delta Hedging simulation](./black-scholes-hedging/fx/fx-delta-hedging-simulations.ipynb)
 - Spread Option
   - [Delta Hedging exchange option $X = max(S_1 - S_2, 0)$](black-scholes-hedging/spread-option/delta_hedging_spread.ipynb)
   - [Gamma Hedging exchange option $X = max(S_1 - S_2, 0)$](black-scholes-hedging/spread-option/gamma_hedging_spread.ipynb)
